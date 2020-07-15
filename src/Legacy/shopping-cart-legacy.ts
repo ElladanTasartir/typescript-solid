@@ -1,4 +1,19 @@
-// Por enquanto, é apenas uma classe que funciona, sem nenhum princípio
+// Single Responsibility Principle: Cada classe/função deve ter apenas um motivo para mudar
+// Em outros termos, isso pode ser lido como, uma classe deve apenas possuir uma responsabilidade
+// Tipos de "responsabilidades": Regras de negócios, persistência de dados, comunicação com serviços externos,
+// Godclass (classe que faz tudo), validações em grande escala em um lugar só
+
+// Para medir a coesão de uma classe, podemos seguir a lógica do clean code:
+// Uma classe só é coesa, quando ela utiliza os seus atributos em seus métodos
+
+// Responsabilidades a mais da classe ShopppingCart:
+// Status da ordem, precisa ficar dentro do carrinho?
+// Devemos finalizar o pedido, dentro do carrinho de compras? Será que é uma responsabilidade dele?
+// Não deveria ser só armazenar os produtos?
+// Enviar mensagens, é algo que o carrinho deve fazer?
+// Salvar o pedido, é responsabilidade de um carrinho de compras?
+// Order pode se tornar a sua própria classe
+
 type CartItem = {
   name: string;
   price: number;
@@ -6,7 +21,7 @@ type CartItem = {
 
 type OrderStatus = 'open' | 'closed';
 
-export class ShoppingCart {
+export class ShoppingCartLegacy {
   private readonly _items: CartItem[] = [];
   private _orderStatus: OrderStatus = 'open';
 
@@ -59,13 +74,13 @@ export class ShoppingCart {
   }
 
   clear(): void {
-    // Dessa forma, retiramos todos os itens de um array
     console.log('Carrinho de compras foi limpo');
+    // Dessa forma, retiramos todos os itens de um array
     this._items.length = 0;
   }
 }
 
-const shoppingCart = new ShoppingCart();
+const shoppingCart = new ShoppingCartLegacy();
 shoppingCart.addItem({ name: 'Camiseta', price: 49.9 });
 shoppingCart.addItem({ name: 'Caderno', price: 9.9 });
 shoppingCart.addItem({ name: 'Lápis', price: 1.59 });
