@@ -1,21 +1,8 @@
-// A Order, ou seja, o pedido, por se tratar do que engloba o serviço, pode muito bem
-// Ser o responsável por finalizar O PEDIDO, porque ninguém melhor do que ele mesmo para isso
-// Realizando uma responsabilidade sua, dessa forma, o pedido precisa de um carrinho para
-// Conseguir realizar suas funções de ver as compras para finalizar o pedido
-
-// sendMessage, tem a ver com order? Não, por isso delegamos isso para uma pequena classe
-// Que poderia até ser uma função, que realiza o envio de mensagens
-
-// QUANTO MENOR A CLASSE/FUNÇÃO/MÓDULO, MELHOR, POIS É MAIS FÁCIL DE DAR MANUTENÇÃO
-
-// Dessa forma realizamos injeções de dependência dentro da classe order
-// Porém, quebramos o princípio de inversão de dependência, pois o nosso código está
-// Dependendo de classes concretas e não de abstrações dessas classes
-
 import { OrderStatus } from './interfaces/order-status';
 import { ShoppingCart } from './shopping-cart';
 import { Messaging } from '../servicies/messaging';
 import { Persistence } from '../servicies/persistence';
+import { CustomerOrder } from './interfaces/customer-protocol';
 
 export class Order {
   private _orderStatus: OrderStatus = 'open';
@@ -24,6 +11,7 @@ export class Order {
     private readonly cart: ShoppingCart,
     private readonly messaging: Messaging,
     private readonly persistence: Persistence,
+    private readonly customer: CustomerOrder,
   ) {}
 
   get orderStatus(): OrderStatus {
@@ -42,5 +30,10 @@ export class Order {
     );
     this.persistence.saveOrder();
     this.cart.clear();
+    console.log(
+      'O cliente é: ',
+      this.customer.getName(),
+      this.customer.getIDN(),
+    );
   }
 }
